@@ -380,6 +380,8 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
 | city | string | 否 | 城市，默认"大理" |
 | days | int | 是 | 天数，1-7 |
 | theme | string | 否 | 主题标签 |
+| pace | string | 否 | 节奏：relaxed(轻松)/moderate(适中)/intensive(紧凑)，默认moderate |
+| travelers | string | 否 | 出行人群：solo/couple/family/friends |
 | startLng | number | 否 | 起点经度 |
 | startLat | number | 否 | 起点纬度 |
 
@@ -389,7 +391,9 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
 {
   "city": "大理",
   "days": 3,
-  "theme": "古镇"
+  "theme": "古镇",
+  "pace": "relaxed",
+  "travelers": "couple"
 }
 ```
 
@@ -404,12 +408,17 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
     "city": "大理",
     "days": 3,
     "theme": "古镇",
+    "title": "大理3日浪漫古镇之旅",
+    "summary": "漫步白族古镇，感受风花雪月的浪漫",
     "dayList": [
       {
         "dayIndex": 1,
+        "theme": "大理古城慢时光",
+        "notes": "今日以古城为主，不赶时间，慢慢感受",
         "items": [
           {
             "orderIndex": 1,
+            "startTime": "10:00",
             "poi": {
               "id": 1,
               "name": "大理古城",
@@ -419,6 +428,7 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
               "coverImage": "https://...",
               "visitDuration": 180
             },
+            "tips": "从南门进入，沿复兴路漫步，感受白族建筑风情",
             "routeToNext": {
               "distanceMeter": 1500,
               "walkDurationSec": 1200,
@@ -429,6 +439,7 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
           },
           {
             "orderIndex": 2,
+            "startTime": "15:00",
             "poi": {
               "id": 6,
               "name": "崇圣寺三塔",
@@ -438,19 +449,25 @@ GET /api/pois?city=大理&area=古城区&page=1&size=10
               "coverImage": "https://...",
               "visitDuration": 120
             },
+            "tips": "傍晚光线最佳，可拍摄三塔倒影",
             "routeToNext": null
           }
         ]
       },
       {
         "dayIndex": 2,
+        "theme": "双廊洱海风光",
+        "notes": "建议在双廊住一晚，体验洱海日落日出",
         "items": [ ... ]
       },
       {
         "dayIndex": 3,
+        "theme": "喜洲田园风光",
+        "notes": "今日较为轻松，可慢慢拍照",
         "items": [ ... ]
       }
     ],
+    "tips": ["大理紫外线强，注意防晒", "早晚温差大，带件薄外套"],
     "mapData": {
       "center": [100.1653, 25.6969],
       "zoom": 12,
