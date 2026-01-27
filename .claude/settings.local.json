@@ -9,7 +9,12 @@
       "Bash(git push:*)",
       "Bash(ssh-keyscan:*)",
       "Bash(~/.ssh/known_hosts)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 将前端技术栈从 TypeScript 改为 JavaScript\n\n- 修改技术架构文档中的技术栈选型\n- 更新前端模块结构，移除 types 目录\n- 文件扩展名从 .ts 改为 .js\n- 更新代码规范为 JavaScript 规范\n- 同步更新 README 中的技术栈描述\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 将前端技术栈从 TypeScript 改为 JavaScript\n\n- 修改技术架构文档中的技术栈选型\n- 更新前端模块结构，移除 types 目录\n- 文件扩展名从 .ts 改为 .js\n- 更新代码规范为 JavaScript 规范\n- 同步更新 README 中的技术栈描述\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebFetch(domain:lbs.amap.com)",
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 更新POI数据获取方案验证结果\n\n- 高德API验证通过，可返回450个大理景点\n- 确定采用「高德API + 人工补充」方案\n- 记录API调用示例和返回数据结构\n- 规划下一步：区域划分和标签体系设计\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
