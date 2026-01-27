@@ -14,7 +14,8 @@
       "WebSearch",
       "Bash(curl:*)",
       "Bash(python3:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 更新POI数据获取方案验证结果\n\n- 高德API验证通过，可返回450个大理景点\n- 确定采用「高德API + 人工补充」方案\n- 记录API调用示例和返回数据结构\n- 规划下一步：区域划分和标签体系设计\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 更新POI数据获取方案验证结果\n\n- 高德API验证通过，可返回450个大理景点\n- 确定采用「高德API + 人工补充」方案\n- 记录API调用示例和返回数据结构\n- 规划下一步：区域划分和标签体系设计\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 添加智能POI标注方案对比文档\n\n对比多种自动化标注方案：\n- 携程开放平台API\n- 百度地图Place API\n- AI大模型智能标注（推荐）\n- 多API组合方案\n\n推荐采用「高德API + AI大模型」方案\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
