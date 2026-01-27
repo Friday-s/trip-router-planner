@@ -21,7 +21,7 @@
 ## 🛠 技术栈
 
 ### 前端
-- Vue 3 + TypeScript
+- Vue 3 + JavaScript
 - Vite
 - Element Plus
 - Pinia

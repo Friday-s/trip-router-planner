@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 添加旅游线路规划平台项目文档\n\n包含6个核心文档：\n- 产品需求文档 \\(PRD\\)\n- 技术架构文档\n- 数据库设计文档\n- API接口文档\n- 核心算法文档\n- 部署运维文档\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git remote set-url:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(ssh-keyscan:*)",
+      "Bash(~/.ssh/known_hosts)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 将前端技术栈从 TypeScript 改为 JavaScript\n\n- 修改技术架构文档中的技术栈选型\n- 更新前端模块结构，移除 types 目录\n- 文件扩展名从 .ts 改为 .js\n- 更新代码规范为 JavaScript 规范\n- 同步更新 README 中的技术栈描述\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
