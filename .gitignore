@@ -1,0 +1,111 @@
+# 操作系统
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.iml
+
+# 日志
+*.log
+logs/
+*.log.*
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# 依赖
+node_modules/
+.pnp
+.pnp.js
+target/
+dist/
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# 缓存
+.cache/
+.parcel-cache/
+.npm/
+.yarn/
+.pnpm-store/
+.redis/
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# 数据库
+*.db
+*.sqlite
+*.sqlite3
+
+# 测试覆盖率
+coverage/
+.nyc_output/
+*.lcov
+
+# 打包文件
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# 后端特定
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# 前端特定
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env.local
+frontend/.env.*.local
+
+# Python特定
+python-tools/__pycache__/
+python-tools/*.pyc
+python-tools/venv/
+python-tools/.venv/
+python-tools/*.egg-info/
+
+# 部署相关
+deploy/*.key
+deploy/*.pem
+deploy/secrets/
+
+# 其他
+*.orig
+*.rej
