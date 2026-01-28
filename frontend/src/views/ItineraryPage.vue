@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getItineraryDetail, saveItinerary } from '@/api/itinerary'
@@ -209,22 +209,44 @@ async function confirmPublish() {
 }
 
 function initMap() {
-  if (!window.AMap || !itinerary.value?.mapData) return
+  if (!window.AMap) {
+    console.error('高德地图API未加载')
+    return
+  }
+
+  if (!itinerary.value?.mapData) {
+    console.error('地图数据不存在')
+    return
+  }
+
+  const mapData = itinerary.value.mapData
+
+  // 转换中心点坐标为数字
+  const center = mapData.center ? [
+    parseFloat(mapData.center[0]),
+    parseFloat(mapData.center[1])
+  ] : [100.1653, 25.6969]
 
   map.value = new window.AMap.Map('amap', {
-    zoom: itinerary.value.mapData.zoom || 12,
-    center: itinerary.value.mapData.center
+    zoom: mapData.zoom || 12,
+    center: center,
+    viewMode: '2D'
   })
 
   // 添加标记点
-  const markers = itinerary.value.mapData.markers || []
+  const markers = mapData.markers || []
   const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#909399', '#00c4b6', '#ff7c00']
 
   markers.forEach(marker => {
     const color = colors[(marker.dayIndex - 1) % colors.length]
+    // 转换坐标为数字
+    const position = [
+      parseFloat(marker.position[0]),
+      parseFloat(marker.position[1])
+    ]
 
     new window.AMap.Marker({
-      position: marker.position,
+      position: position,
       map: map.value,
       label: {
         content: `<div style="background:${color};color:#fff;padding:2px 6px;border-radius:10px;font-size:12px;">D${marker.dayIndex}-${marker.orderIndex}</div>`,
@@ -234,12 +256,17 @@ function initMap() {
   })
 
   // 添加路线
-  const polylines = itinerary.value.mapData.polylines || []
+  const polylines = mapData.polylines || []
   polylines.forEach(polyline => {
     const color = colors[(polyline.dayIndex - 1) % colors.length]
+    // 转换路径坐标为数字
+    const path = polyline.path.map(point => [
+      parseFloat(point[0]),
+      parseFloat(point[1])
+    ])
 
     new window.AMap.Polyline({
-      path: polyline.path,
+      path: path,
       strokeColor: color,
       strokeWeight: 3,
       strokeOpacity: 0.8,
@@ -248,7 +275,9 @@ function initMap() {
   })
 
   // 自适应视野
-  map.value.setFitView()
+  if (markers.length > 0) {
+    map.value.setFitView()
+  }
 }
 
 onMounted(async () => {
@@ -257,7 +286,9 @@ onMounted(async () => {
     itinerary.value = res.data
 
     // 等待 DOM 更新后初始化地图
-    setTimeout(initMap, 100)
+    await nextTick()
+    // 延迟确保地图容器已渲染
+    setTimeout(initMap, 200)
   } catch (error) {
     console.error('获取行程失败:', error)
     router.push('/')
@@ -489,10 +520,13 @@ onUnmounted(() => {
 .map-container {
   flex: 1;
   height: 100%;
+  min-height: 400px;
+  background: #e4e4e4;
 
   .amap-container {
     width: 100%;
     height: 100%;
+    min-height: 400px;
   }
 }
 </style>
