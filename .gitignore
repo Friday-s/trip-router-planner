@@ -109,3 +109,9 @@ deploy/secrets/
 # 其他
 *.orig
 *.rej
+
+# Claude Code
+.claude/
+
+# Memory Bank
+memory-bank/
