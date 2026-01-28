@@ -209,75 +209,79 @@ async function confirmPublish() {
 }
 
 function initMap() {
-  if (!window.AMap) {
-    console.error('高德地图API未加载')
-    return
-  }
-
   if (!itinerary.value?.mapData) {
     console.error('地图数据不存在')
     return
   }
 
-  const mapData = itinerary.value.mapData
+  // 使用 AMapLoader 动态加载高德地图
+  window.AMapLoader.load({
+    key: '1bff3863bb0fa284917db902aa91bfa7',
+    version: '2.0',
+    plugins: []
+  }).then((AMap) => {
+    const mapData = itinerary.value.mapData
 
-  // 转换中心点坐标为数字
-  const center = mapData.center ? [
-    parseFloat(mapData.center[0]),
-    parseFloat(mapData.center[1])
-  ] : [100.1653, 25.6969]
+    // 转换中心点坐标为数字
+    const center = mapData.center ? [
+      parseFloat(mapData.center[0]),
+      parseFloat(mapData.center[1])
+    ] : [100.1653, 25.6969]
 
-  map.value = new window.AMap.Map('amap', {
-    zoom: mapData.zoom || 12,
-    center: center,
-    viewMode: '2D'
-  })
-
-  // 添加标记点
-  const markers = mapData.markers || []
-  const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#909399', '#00c4b6', '#ff7c00']
-
-  markers.forEach(marker => {
-    const color = colors[(marker.dayIndex - 1) % colors.length]
-    // 转换坐标为数字
-    const position = [
-      parseFloat(marker.position[0]),
-      parseFloat(marker.position[1])
-    ]
-
-    new window.AMap.Marker({
-      position: position,
-      map: map.value,
-      label: {
-        content: `<div style="background:${color};color:#fff;padding:2px 6px;border-radius:10px;font-size:12px;">D${marker.dayIndex}-${marker.orderIndex}</div>`,
-        direction: 'top'
-      }
+    map.value = new AMap.Map('amap', {
+      zoom: mapData.zoom || 12,
+      center: center,
+      viewMode: '2D'
     })
-  })
 
-  // 添加路线
-  const polylines = mapData.polylines || []
-  polylines.forEach(polyline => {
-    const color = colors[(polyline.dayIndex - 1) % colors.length]
-    // 转换路径坐标为数字
-    const path = polyline.path.map(point => [
-      parseFloat(point[0]),
-      parseFloat(point[1])
-    ])
+    // 添加标记点
+    const markers = mapData.markers || []
+    const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#909399', '#00c4b6', '#ff7c00']
 
-    new window.AMap.Polyline({
-      path: path,
-      strokeColor: color,
-      strokeWeight: 3,
-      strokeOpacity: 0.8,
-      map: map.value
+    markers.forEach(marker => {
+      const color = colors[(marker.dayIndex - 1) % colors.length]
+      // 转换坐标为数字
+      const position = [
+        parseFloat(marker.position[0]),
+        parseFloat(marker.position[1])
+      ]
+
+      new AMap.Marker({
+        position: position,
+        map: map.value,
+        label: {
+          content: `<div style="background:${color};color:#fff;padding:2px 6px;border-radius:10px;font-size:12px;">D${marker.dayIndex}-${marker.orderIndex}</div>`,
+          direction: 'top'
+        }
+      })
     })
-  })
 
-  // 自适应视野
-  if (markers.length > 0) {
-    map.value.setFitView()
-  }
+    // 添加路线
+    const polylines = mapData.polylines || []
+    polylines.forEach(polyline => {
+      const color = colors[(polyline.dayIndex - 1) % colors.length]
+      // 转换路径坐标为数字
+      const path = polyline.path.map(point => [
+        parseFloat(point[0]),
+        parseFloat(point[1])
+      ])
+
+      new AMap.Polyline({
+        path: path,
+        strokeColor: color,
+        strokeWeight: 3,
+        strokeOpacity: 0.8,
+        map: map.value
+      })
+    })
+
+    // 自适应视野
+    if (markers.length > 0) {
+      map.value.setFitView()
+    }
+  }).catch((e) => {
+    console.error('高德地图加载失败:', e)
+  })
 }
 
 onMounted(async () => {
