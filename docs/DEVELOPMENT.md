@@ -288,19 +288,154 @@ export default {
 
 ---
 
-## 常见问题
+## 常见问题与解决方案
 
-### Q: 后端启动报数据库连接失败
-A: 检查MySQL是否启动，数据库是否创建，用户名密码是否正确。
+### 数据库相关
 
-### Q: 前端启动报端口占用
-A: 修改 vite.config.js 中的端口，或关闭占用端口的进程。
+#### Q1: 后端启动报 `Public Key Retrieval is not allowed`
+**原因**：MySQL 8.0+ 使用 `caching_sha2_password` 认证插件，需要额外配置。
 
-### Q: 行程生成超时
-A: 检查 DeepSeek API Key 是否配置正确，网络是否可访问API。
+**解决方案**：在 JDBC URL 中添加参数：
+```
+jdbc:mysql://localhost:3306/trip_planner?allowPublicKeyRetrieval=true&useSSL=false
+```
 
-### Q: 地图不显示
-A: 检查高德地图 Key 和安全密钥是否正确配置。
+#### Q2: 后端启动报 `Access denied for user 'root'@'localhost'`
+**原因**：配置文件中的密码与实际 MySQL 密码不匹配。
+
+**解决方案**：检查 `application.yml` 中的密码配置：
+```yaml
+spring:
+  datasource:
+    password: ${DB_PASSWORD:}  # 默认空密码，或设置为你的MySQL密码
+```
+
+#### Q3: POI查询报 `Parameter index out of range`
+**原因**：MyBatis-Plus 的 `JSON_CONTAINS` 函数参数绑定语法错误。
+
+**错误写法**：
+```java
+wrapper.apply("JSON_CONTAINS(tags, '\"{0}\"')", tag);
+```
+
+**正确写法**：
+```java
+wrapper.apply("JSON_CONTAINS(tags, {0})", "\"" + tag + "\"");
+```
+
+---
+
+### 认证相关
+
+#### Q4: 管理员账号无法登录
+**原因**：`init-data.sql` 中的 BCrypt 哈希值与密码不匹配。
+
+**解决方案**：
+1. 通过注册接口创建新用户获取正确的哈希值
+2. 或使用在线 BCrypt 工具生成哈希值
+3. 更新数据库中的密码字段
+
+**注意**：BCrypt 每次加密结果不同，但都能正确验证。确保使用正确的明文密码生成哈希。
+
+#### Q5: 管理员登录后未跳转到后台
+**原因**：登录成功后未根据角色判断跳转路径。
+
+**解决方案**：在登录成功回调中添加角色判断：
+```javascript
+if (userStore.user?.role === 'admin') {
+  router.push('/admin')
+} else {
+  router.push(route.query.redirect || '/')
+}
+```
+
+---
+
+### 地图相关
+
+#### Q6: 地图只显示标记点，底图不渲染
+**原因**：后端返回的坐标是 `BigDecimal` 类型，序列化为 JSON 后变成字符串，高德地图要求数字类型。
+
+**解决方案**：在前端使用 `parseFloat()` 转换坐标：
+```javascript
+const center = [
+  parseFloat(mapData.center[0]),
+  parseFloat(mapData.center[1])
+]
+```
+
+#### Q7: 高德地图 API 调用失败
+**原因**：2021年12月后申请的 Key 必须配合安全密钥使用。
+
+**解决方案**：
+1. 在高德开放平台申请 JS API Key 和安全密钥
+2. 在 `index.html` 中配置（注意顺序）：
+
+```html
+<!-- 安全密钥配置（必须在 loader.js 之前） -->
+<script type="text/javascript">
+  window._AMapSecurityConfig = {
+    securityJsCode: '你的安全密钥'
+  }
+</script>
+<!-- 高德地图 JS API Loader -->
+<script src="https://webapi.amap.com/loader.js"></script>
+```
+
+3. 在 Vue 组件中使用 AMapLoader 加载：
+```javascript
+window.AMapLoader.load({
+  key: '你的JS API Key',
+  version: '2.0',
+  plugins: []
+}).then((AMap) => {
+  // 初始化地图
+})
+```
+
+#### Q8: 高德地图密钥体系说明
+
+| 密钥类型 | 用途 | 配置位置 |
+|----------|------|----------|
+| JS API Key | 前端地图展示 | AMapLoader.load() 的 key 参数 |
+| 安全密钥 | 配合 JS API Key 使用 | window._AMapSecurityConfig |
+| Web 服务 Key | 后端调用路径规划等 API | 后端环境变量 |
+
+---
+
+### 前端相关
+
+#### Q9: 前端启动报端口占用
+**解决方案**：修改 `vite.config.js` 中的端口：
+```javascript
+server: {
+  port: 3001  // 改为其他端口
+}
+```
+
+#### Q10: 行程生成超时
+**可能原因**：
+1. DeepSeek API Key 未配置或无效
+2. 网络无法访问 AI API
+3. POI 数据不足
+
+**排查步骤**：
+1. 检查后端日志中的 API 调用错误
+2. 确认 `DEEPSEEK_API_KEY` 环境变量已设置
+3. 确认数据库中有足够的 POI 数据
+
+---
+
+## 版本日志
+
+所有版本更新记录请查看 `docs/changelog/` 目录：
+
+| 版本 | 日期 | 主要内容 |
+|------|------|----------|
+| v1.0.0 | 2026-01-28 | MVP 版本发布 |
+| v1.0.1 | 2026-01-28 | 修复管理员登录、数据库连接等问题 |
+| v1.0.2 | 2026-01-28 | 修复地图坐标类型问题 |
+| v1.0.3 | 2026-01-28 | 改用 AMapLoader 并配置安全密钥 |
 
 ---
 
