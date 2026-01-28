@@ -11,14 +11,14 @@ USE trip_planner;
 -- 默认密码: admin123 (BCrypt加密)
 -- ============================================
 INSERT INTO users (username, email, password, role) VALUES
-('admin', 'admin@trip.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'admin');
+('admin', 'admin@trip.com', '$2a$10$ZjBcIyX5sG1EFbRHTxVUv.oyu37gKxPNixUWshthQnWukFsQiG426', 'admin');
 
 -- ============================================
 -- 2. 插入测试用户
 -- 默认密码: 123456 (BCrypt加密)
 -- ============================================
 INSERT INTO users (username, email, password, role) VALUES
-('traveler', 'traveler@example.com', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'user');
+('traveler', 'traveler@example.com', '$2a$10$ZjBcIyX5sG1EFbRHTxVUv.oyu37gKxPNixUWshthQnWukFsQiG426', 'user');
 
 -- ============================================
 -- 3. 插入大理POI数据（含AI标注字段）

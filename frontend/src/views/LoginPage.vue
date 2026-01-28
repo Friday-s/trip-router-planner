@@ -67,8 +67,13 @@ async function handleLogin() {
     await userStore.login(form.value)
     ElMessage.success('登录成功！')
 
-    const redirect = route.query.redirect || '/'
-    router.push(redirect)
+    // 管理员跳转到后台，普通用户跳转到首页或重定向页面
+    if (userStore.user?.role === 'admin') {
+      router.push('/admin')
+    } else {
+      const redirect = route.query.redirect || '/'
+      router.push(redirect)
+    }
   } catch (error) {
     console.error('登录失败:', error)
   } finally {
